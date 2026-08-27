@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ---- Color: "Study Lab" palette ---- */
+  --color-paper: #F6F7F9;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F0F2F5;
+  --color-ink-900: #10161B;
+  --color-ink-700: #33404A;
+  --color-ink-500: #66727C;
+  --color-ink-300: #9AA5AD;
+  --color-line: #E2E6EA;
+  --color-line-soft: #ECEEF1;
+
+  --color-brand-50:  #EBF7F5;
+  --color-brand-100: #D2EEE9;
+  --color-brand-300: #7FCFC2;
+  --color-brand-500: #14887A;
+  --color-brand-600: #0D6F63;
+  --color-brand-700: #0A5850;
+  --color-brand-900: #0A332E;
+
+  --color-spark-50:  #FDF3E3;
+  --color-spark-300: #F7C874;
+  --color-spark-500: #EFA023;
+  --color-spark-600: #CC8410;
+
+  --color-violet-400: #9B90F0;
+  --color-violet-500: #7C6FE8;
+  --color-violet-600: #6355D6;
+
+  --color-success: #1E9E6B;
+  --color-success-50: #E8F6F0;
+  --color-danger: #E1483F;
+  --color-danger-50: #FCEBEA;
+  --color-warning: #EFA023;
+  --color-warning-50: #FDF3E3;
+
+  /* dark mode surfaces */
+  --color-night-950: #0B0F13;
+  --color-night-900: #10151B;
+  --color-night-800: #171E26;
+  --color-night-700: #212A33;
+
+  --font-display: "Lexend", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px rgba(16, 22, 27, 0.04), 0 6px 16px -6px rgba(16, 22, 27, 0.08);
+  --shadow-card-hover: 0 2px 4px rgba(16, 22, 27, 0.05), 0 14px 28px -10px rgba(16, 22, 27, 0.14);
+  --shadow-glow-brand: 0 8px 24px -8px rgba(20, 136, 122, 0.35);
+  --shadow-glow-spark: 0 8px 24px -8px rgba(239, 160, 35, 0.35);
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
+  background-color: var(--color-night-950);
+  color: #EAF0F3;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Focus ring, applied consistently */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Custom scrollbar for chat/panels */
+.thin-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* AI glow border used on AI-generated content surfaces (the page's signature device) */
+.ai-edge {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(180deg, rgba(20,136,122,0.06), rgba(124,111,232,0.05));
+}
+.ai-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--color-brand-500), var(--color-violet-500) 60%, var(--color-spark-500));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Pulse dot for "AI thinking" */
+@keyframes pulse-dot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.pulse-dot { animation: pulse-dot 1.2s ease-in-out infinite; }
+
+@keyframes ring-progress {
+  from { stroke-dashoffset: var(--ring-from); }
+  to { stroke-dashoffset: var(--ring-to); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
