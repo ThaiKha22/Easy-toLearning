@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import apiRoutes from "./routes/index.js";
 import errorMiddleware from "./middleware/error.middleware.js";
 import env from "./config/env.js";
 
@@ -23,13 +24,7 @@ if (env.nodeEnv === "development") {
   app.use(morgan("dev"));
 }
 
-app.get("/api/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "AI StudyHub API is running",
-    timestamp: new Date().toISOString(),
-  });
-});
+app.use("/api", apiRoutes);
 
 app.use(errorMiddleware);
 
