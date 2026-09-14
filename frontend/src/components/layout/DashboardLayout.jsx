@@ -1,29 +1,31 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import MobileSidebar from './MobileSidebar';
 import Header from './Header';
 
 const TITLES = [
-  { test: (p) => p === '/dashboard', title: 'Dashboard' },
-  { test: (p) => p === '/subjects', title: 'My Subjects' },
-  { test: (p) => /^\/subjects\/[^/]+\/documents$/.test(p), title: 'Documents' },
-  { test: (p) => /^\/subjects\/[^/]+$/.test(p), title: 'Subject' },
-  { test: (p) => /^\/documents\//.test(p), title: 'Study Material' },
-  { test: (p) => p === '/flashcards', title: 'Flashcards' },
-  { test: (p) => p === '/quizzes', title: 'Quizzes' },
-  { test: (p) => /^\/quizzes\//.test(p), title: 'Quiz' },
-  { test: (p) => /^\/quiz-results\//.test(p), title: 'Quiz Results' },
-  { test: (p) => p === '/ai-tutor', title: 'AI Tutor' },
-  { test: (p) => p === '/study-plan', title: 'Study Plan' },
-  { test: (p) => p === '/analytics', title: 'Analytics' },
-  { test: (p) => p === '/profile', title: 'Profile & Settings' },
-  { test: (p) => p === '/help', title: 'Help' },
+  { test: (p) => p === '/dashboard', titleKey: 'nav.dashboard' },
+  { test: (p) => p === '/subjects', titleKey: 'nav.subjects' },
+  { test: (p) => /^\/subjects\/[^/]+\/documents$/.test(p), titleKey: 'page.documents' },
+  { test: (p) => /^\/subjects\/[^/]+$/.test(p), titleKey: 'page.subject' },
+  { test: (p) => /^\/documents\//.test(p), titleKey: 'page.studyMaterial' },
+  { test: (p) => p === '/flashcards', titleKey: 'nav.flashcards' },
+  { test: (p) => p === '/quizzes', titleKey: 'nav.quizzes' },
+  { test: (p) => /^\/quizzes\//.test(p), titleKey: 'page.quiz' },
+  { test: (p) => /^\/quiz-results\//.test(p), titleKey: 'page.quizResults' },
+  { test: (p) => p === '/study-plan', titleKey: 'nav.studyPlan' },
+  { test: (p) => p === '/analytics', titleKey: 'nav.analytics' },
+  { test: (p) => p === '/profile', titleKey: 'page.profile' },
+  { test: (p) => p === '/help', titleKey: 'nav.help' },
 ];
 
 function useTitle() {
   const { pathname } = useLocation();
-  return TITLES.find((t) => t.test(pathname))?.title || 'AI StudyHub';
+  const { t } = useTranslation();
+  const titleKey = TITLES.find((item) => item.test(pathname))?.titleKey;
+  return titleKey ? t(titleKey) : 'AI StudyHub';
 }
 
 export default function DashboardLayout() {

@@ -1,13 +1,24 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
+import { studyPlanService } from '../../services/api';
 import Card from '../ui/Card';
 import Badge from '../ui/Badge';
 
 const diffVariant = { Easy: 'success', Medium: 'spark', Hard: 'danger' };
 
-export default function DayPlanCard({ day, tasks: initialTasks, isToday }) {
+export default function DayPlanCard({ day, planId, tasks: initialTasks = [], isToday }) {
   const [tasks, setTasks] = useState(initialTasks);
-  const toggle = (id) => setTasks((ts) => ts.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+  const toggle = async (id) => {
+    const task = tasks.find((item) => item.id === id);
+    if (!task) return;
+    const done = !task.done;
+    setTasks((current) => current.map((item) => (item.id === id ? { ...item, done } : item)));
+    try {
+      await studyPlanService.updateTask(planId, id, done);
+    } catch {
+      setTasks((current) => current.map((item) => (item.id === id ? { ...item, done: !done } : item)));
+    }
+  };
   const doneCount = tasks.filter((t) => t.done).length;
 
   return (

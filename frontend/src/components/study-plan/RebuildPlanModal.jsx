@@ -3,10 +3,12 @@ import { Sparkles } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
+import { useTranslation } from 'react-i18next';
 
 const difficulties = ['Easy', 'Adaptive', 'Hard'];
 
 export default function RebuildPlanModal({ open, onClose, onRebuild }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState({ examDate: '2026-09-19', dailyTime: '45', targetScore: '85', difficulty: 'Adaptive' });
   const [loading, setLoading] = useState(false);
 
@@ -20,13 +22,13 @@ export default function RebuildPlanModal({ open, onClose, onRebuild }) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Ask AI to Rebuild Plan">
+    <Modal open={open} onClose={onClose} title={t('plan.rebuildTitle')}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input label="Exam date" type="date" value={form.examDate} onChange={(e) => setForm((f) => ({ ...f, examDate: e.target.value }))} />
-        <Input label="Daily available time (min)" type="number" value={form.dailyTime} onChange={(e) => setForm((f) => ({ ...f, dailyTime: e.target.value }))} />
-        <Input label="Target score (%)" type="number" value={form.targetScore} onChange={(e) => setForm((f) => ({ ...f, targetScore: e.target.value }))} />
+        <Input label={t('plan.examDate')} type="date" value={form.examDate} onChange={(e) => setForm((f) => ({ ...f, examDate: e.target.value }))} />
+        <Input label={t('plan.dailyTime')} type="number" value={form.dailyTime} onChange={(e) => setForm((f) => ({ ...f, dailyTime: e.target.value }))} />
+        <Input label={t('plan.targetScore')} type="number" value={form.targetScore} onChange={(e) => setForm((f) => ({ ...f, targetScore: e.target.value }))} />
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink-700">Difficulty</label>
+          <label className="mb-1.5 block text-sm font-medium text-ink-700">{t('plan.difficulty')}</label>
           <div className="flex gap-2">
             {difficulties.map((d) => (
               <button
@@ -42,7 +44,7 @@ export default function RebuildPlanModal({ open, onClose, onRebuild }) {
             ))}
           </div>
         </div>
-        <Button type="submit" fullWidth loading={loading} icon={Sparkles}>Rebuild My Plan</Button>
+        <Button type="submit" fullWidth loading={loading} icon={Sparkles}>{t('plan.rebuild')}</Button>
       </form>
     </Modal>
   );

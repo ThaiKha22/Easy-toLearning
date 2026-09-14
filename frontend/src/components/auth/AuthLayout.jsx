@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Sparkles, ShieldCheck, Zap, TrendingUp } from 'lucide-react';
 
 const points = [
@@ -8,6 +9,12 @@ const points = [
 ];
 
 export default function AuthLayout({ children, title, subtitle }) {
+  const { t } = useTranslation();
+  const points = [
+    { icon: Zap, text: t('auth.summaries') },
+    { icon: TrendingUp, text: t('auth.plans') },
+    { icon: ShieldCheck, text: t('auth.private') },
+  ];
   return (
     <div className="flex min-h-screen bg-paper">
       <div className="hidden w-[42%] flex-col justify-between bg-ink-900 p-10 text-white lg:flex xl:p-14">
@@ -20,7 +27,7 @@ export default function AuthLayout({ children, title, subtitle }) {
 
         <div>
           <p className="font-display text-3xl font-semibold leading-tight xl:text-4xl">
-            Study smarter, not longer.
+            {t('auth.smarter')}
           </p>
           <div className="mt-8 space-y-5">
             {points.map(({ icon: Icon, text }, i) => (
@@ -34,7 +41,7 @@ export default function AuthLayout({ children, title, subtitle }) {
           </div>
         </div>
 
-        <p className="text-xs text-white/40">© 2026 AI StudyHub. Built for students who want their time back.</p>
+        <p className="text-xs text-white/40">{t('auth.rights')}</p>
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-10 sm:px-10">

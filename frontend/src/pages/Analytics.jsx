@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, Radar,
   ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid,
@@ -14,6 +15,7 @@ import ErrorState from '../components/ui/ErrorState';
 const chartTooltip = { borderRadius: 12, border: '1px solid var(--color-line)', fontSize: 12 };
 
 export default function Analytics() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState(null);
   const [charts, setCharts] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,10 +35,10 @@ export default function Analytics() {
   if (error || !stats || !charts) return <ErrorState onRetry={load} />;
 
   const statItems = [
-    { label: 'Total Study Time', value: formatMinutes(stats.totalStudyMinutes), icon: Clock, color: 'text-brand-600 bg-brand-50' },
-    { label: 'Current Streak', value: `${stats.currentStreak} days`, icon: Flame, color: 'text-spark-600 bg-spark-50' },
-    { label: 'Average Quiz Score', value: `${stats.averageQuizScore}%`, icon: Target, color: 'text-violet-600 bg-[#EFEDFC]' },
-    { label: 'Topics Mastered', value: stats.topicsMastered, icon: Award, color: 'text-success bg-success-50' },
+    { label: t('analytics.totalStudyTime'), value: formatMinutes(stats.totalStudyMinutes), icon: Clock, color: 'text-brand-600 bg-brand-50' },
+    { label: t('analytics.currentStreak'), value: `${stats.currentStreak} ${t('dashboard.days')}`, icon: Flame, color: 'text-spark-600 bg-spark-50' },
+    { label: t('analytics.averageQuiz'), value: `${stats.averageQuizScore}%`, icon: Target, color: 'text-violet-600 bg-[#EFEDFC]' },
+    { label: t('analytics.topicsMastered'), value: stats.topicsMastered, icon: Award, color: 'text-success bg-success-50' },
   ];
 
   return (
@@ -57,14 +59,14 @@ export default function Analytics() {
             <Sparkles size={15} />
           </div>
           <p className="text-sm leading-relaxed text-ink-800">
-            <span className="font-semibold text-ink-900">AI Insight:</span> Your quiz performance has improved 14% over the last two weeks.
+            <span className="font-semibold text-ink-900">{t('analytics.insight')}:</span> {t('analytics.improvement')}
           </p>
         </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <Card padding="p-5">
-          <h3 className="font-display text-base font-semibold text-ink-900">Study Time Per Week</h3>
+          <h3 className="font-display text-base font-semibold text-ink-900">{t('analytics.studyTime')}</h3>
           <div className="mt-3 h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={charts.studyTimeWeekly}>
@@ -79,7 +81,7 @@ export default function Analytics() {
         </Card>
 
         <Card padding="p-5">
-          <h3 className="font-display text-base font-semibold text-ink-900">Quiz Performance Over Time</h3>
+          <h3 className="font-display text-base font-semibold text-ink-900">{t('analytics.quizPerformance')}</h3>
           <div className="mt-3 h-56">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={charts.quizPerformance}>
@@ -100,7 +102,7 @@ export default function Analytics() {
         </Card>
 
         <Card padding="p-5">
-          <h3 className="font-display text-base font-semibold text-ink-900">Topic Mastery</h3>
+          <h3 className="font-display text-base font-semibold text-ink-900">{t('analytics.topicMastery')}</h3>
           <div className="mt-3 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={charts.topicMastery}>
@@ -114,7 +116,7 @@ export default function Analytics() {
         </Card>
 
         <Card padding="p-5">
-          <h3 className="font-display text-base font-semibold text-ink-900">Study Consistency</h3>
+          <h3 className="font-display text-base font-semibold text-ink-900">{t('analytics.consistency')}</h3>
           <div className="mt-3 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={charts.consistency}>
@@ -130,7 +132,7 @@ export default function Analytics() {
       </div>
 
       <Card padding="p-5">
-        <h3 className="font-display text-base font-semibold text-ink-900">Weak Topics</h3>
+        <h3 className="font-display text-base font-semibold text-ink-900">{t('analytics.weakTopics')}</h3>
         <div className="mt-4 space-y-3.5">
           {charts.topicMastery.filter((t) => t.mastery < 70).map((t) => (
             <div key={t.topic}>

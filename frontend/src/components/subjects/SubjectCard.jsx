@@ -4,6 +4,7 @@ import Card from '../ui/Card';
 import Button from '../ui/Button';
 import { ProgressBar } from '../ui/Progress';
 import { formatRelativeTime } from '../../utils/format';
+import { useTranslation } from 'react-i18next';
 
 const colorMap = {
   brand: 'text-brand-600 bg-brand-50',
@@ -13,6 +14,7 @@ const colorMap = {
 };
 
 export default function SubjectCard({ subject }) {
+  const { t } = useTranslation();
   return (
     <Card hover padding="p-5" className="flex flex-col">
       <div className="flex items-start justify-between">
@@ -33,9 +35,9 @@ export default function SubjectCard({ subject }) {
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-line-soft pt-3.5">
-        <span className="text-xs text-ink-500">Studied {formatRelativeTime(subject.lastStudied)}</span>
+        <span className="text-xs text-ink-500">{t('subject.studied')} {formatRelativeTime(subject.lastStudied)}</span>
         <Link to={`/subjects/${subject.id}`}>
-          <Button size="sm" variant="secondary" icon={ArrowRight} iconPosition="right">Continue</Button>
+          <Button size="sm" variant="secondary" icon={ArrowRight} iconPosition="right">{t('subject.continue')}</Button>
         </Link>
       </div>
     </Card>

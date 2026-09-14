@@ -1,4 +1,8 @@
 import Document from "../models/Document.js";
+import Flashcard from "../models/Flashcard.js";
+import Quiz from "../models/Quiz.js";
+import QuizAttempt from "../models/Quiz-attempt.js";
+import QuizQuestion from "../models/Quiz-question.js";
 import Subject from "../models/Subject.js";
 import AppError from "../utils/AppError.js";
 import cloudinary from "../config/cloudinary.js";
@@ -150,18 +154,32 @@ export const deleteDocument = async (
     );
   }
 
-  await cloudinary.uploader.destroy(
-    document.publicId,
-    {
-      resource_type:
-        document.resourceType,
-    }
-  );
-
   await Document.deleteOne({
     _id: documentId,
     userId,
   });
+
+  const quizzes = await Quiz.find({ documentId, userId }).select("_id");
+  const quizIds = quizzes.map((quiz) => quiz._id);
+
+  await Promise.all([
+    Flashcard.deleteMany({ documentId, userId }),
+    QuizAttempt.deleteMany({ quizId: { $in: quizIds }, userId }),
+    QuizQuestion.deleteMany({ quizId: { $in: quizIds } }),
+    Quiz.deleteMany({ _id: { $in: quizIds }, userId }),
+  ]);
+
+  try {
+    await cloudinary.uploader.destroy(
+      document.publicId,
+      {
+        resource_type:
+          document.resourceType,
+      }
+    );
+  } catch (error) {
+    console.error("Failed to delete document file from Cloudinary:", error);
+  }
 
   return document;
 };

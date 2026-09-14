@@ -7,6 +7,7 @@ const env = {
   nodeEnv: process.env.NODE_ENV ,
   clientUrl: process.env.CLIENT_URL ,
   mongoUri: process.env.MONGODB_URI,
+  geminiApiKey: process.env.GEMINI_API_KEY,
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET,
     refreshSecret: process.env.JWT_REFRESH_SECRET,
@@ -27,6 +28,7 @@ const env = {
     apiSecret:
       process.env.CLOUDINARY_API_SECRET,
   },
+
 };
 
 export default env;

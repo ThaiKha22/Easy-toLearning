@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus, BookOpen } from 'lucide-react';
 import { subjectService } from '../services/api';
 import SubjectCard from '../components/subjects/SubjectCard';
@@ -10,6 +11,7 @@ import { SkeletonGrid } from '../components/ui/Skeleton';
 import { useToast } from '../components/ui/Toast';
 
 export default function Subjects() {
+  const { t } = useTranslation();
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -24,19 +26,27 @@ export default function Subjects() {
 
   useEffect(load, []);
 
-  function handleCreate(form) {
-    setSubjects((s) => [
-      { id: `sub-${Date.now()}`, name: form.name, description: form.description || 'No description yet.', color: 'brand', progress: 0, documents: 0, flashcards: 0, quizzes: 0, lastStudied: new Date().toISOString(), examDate: form.examDate },
-      ...s,
-    ]);
-    showToast(`"${form.name}" created`, 'success');
+  async function handleCreate(form) {
+    try {
+      const subject = await subjectService.createSubject({
+        name: form.name,
+        description: form.description,
+        examDate: form.examDate || null,
+        dailyStudyTime: Number(form.dailyTime),
+      });
+      setSubjects((s) => [subject, ...s]);
+      showToast(`"${form.name}" đã được tạo`, 'success');
+    } catch (error) {
+      showToast(error.message, 'error');
+      throw error;
+    }
   }
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-ink-500">{subjects.length} subjects</p>
-        <Button icon={Plus} onClick={() => setModalOpen(true)}>Create Subject</Button>
+        <p className="text-sm text-ink-500">{t('content.subjectsCount', { count: subjects.length })}</p>
+        <Button icon={Plus} onClick={() => setModalOpen(true)}>{t('content.createSubject')}</Button>
       </div>
 
       {loading && <SkeletonGrid />}
@@ -44,9 +54,9 @@ export default function Subjects() {
       {!loading && !error && subjects.length === 0 && (
         <EmptyState
           icon={BookOpen}
-          title="No subjects yet"
-          description="Create a subject to start organizing your documents, flashcards and quizzes."
-          action={<Button icon={Plus} onClick={() => setModalOpen(true)}>Create Subject</Button>}
+          title={t('content.noSubjects')}
+          description={t('content.noSubjectsDescription')}
+          action={<Button icon={Plus} onClick={() => setModalOpen(true)}>{t('content.createSubject')}</Button>}
         />
       )}
       {!loading && !error && subjects.length > 0 && (

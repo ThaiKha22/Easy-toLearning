@@ -1,3 +1,5 @@
+import i18n from '../i18n';
+
 export function formatRelativeTime(isoString) {
   const now = new Date('2026-08-23T09:00:00Z');
   const then = new Date(isoString);
@@ -18,10 +20,12 @@ export function formatFileSize(kb) {
 }
 
 export function formatMinutes(mins) {
-  if (mins < 60) return `${mins} min`;
+  if (mins < 60) return `${mins} ${i18n.t('common.minute')}`;
   const h = Math.floor(mins / 60);
   const m = mins % 60;
-  return m ? `${h}h ${m}m` : `${h}h`;
+  return m
+    ? `${h} ${i18n.t('common.hour')} ${m} ${i18n.t('common.minute')}`
+    : `${h} ${i18n.t('common.hour')}`;
 }
 
 export function formatDate(isoString) {

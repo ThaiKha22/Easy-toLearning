@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { dashboardService } from '../services/api';
-import { currentUser } from '../data/mockData';
+import useCurrentUser from '../hooks/useCurrentUser';
 import StatsGrid from '../components/dashboard/StatsGrid';
 import ContinueLearning from '../components/dashboard/ContinueLearning';
 import TodayPlanCard from '../components/dashboard/TodayPlanCard';
@@ -11,6 +12,8 @@ import DashboardSkeleton from '../components/dashboard/DashboardSkeleton';
 import ErrorState from '../components/ui/ErrorState';
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+  const user = useCurrentUser();
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -27,9 +30,9 @@ export default function Dashboard() {
 
   useEffect(load, []);
 
-  const firstName = currentUser.name.split(' ')[0];
+  const firstName = (user?.fullName || user?.name || '').split(' ')[0] || 'bạn';
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = hour < 12 ? t('dashboard.morning') : hour < 18 ? t('dashboard.afternoon') : t('dashboard.evening');
 
   if (loading) return <DashboardSkeleton />;
   if (error || !data) return <ErrorState onRetry={load} />;
@@ -40,7 +43,7 @@ export default function Dashboard() {
         <h2 className="font-display text-2xl font-bold text-ink-900 sm:text-[1.7rem]">
           {greeting}, {firstName} 👋
         </h2>
-        <p className="mt-1 text-sm text-ink-500 sm:text-base">Ready to continue learning?</p>
+        <p className="mt-1 text-sm text-ink-500 sm:text-base">{t('dashboard.ready')}</p>
       </div>
 
       <StatsGrid stats={data.stats} />

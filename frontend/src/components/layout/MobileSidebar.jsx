@@ -1,10 +1,14 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Sparkles, X } from 'lucide-react';
 import { primaryNav, secondaryNav } from './navConfig';
 import Avatar from '../ui/Avatar';
-import { currentUser } from '../../data/mockData';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 export default function MobileSidebar({ open, onClose }) {
+  const { t } = useTranslation();
+  const user = useCurrentUser();
+  const displayName = user?.fullName || user?.name || '';
   return (
     <div
       className={`fixed inset-0 z-50 lg:hidden ${open ? '' : 'pointer-events-none'}`}
@@ -37,7 +41,7 @@ export default function MobileSidebar({ open, onClose }) {
         </div>
 
         <nav className="thin-scroll flex-1 space-y-1 overflow-y-auto px-3 py-2">
-          {primaryNav.map(({ to, label, icon: Icon }) => (
+          {primaryNav.map(({ to, labelKey, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
@@ -49,23 +53,23 @@ export default function MobileSidebar({ open, onClose }) {
               }
             >
               <Icon size={19} />
-              {label}
+              {t(labelKey)}
             </NavLink>
           ))}
         </nav>
 
         <div className="space-y-1 border-t border-line-soft px-3 py-3">
-          {secondaryNav.map(({ to, label, icon: Icon }) => (
+          {secondaryNav.map(({ to, labelKey, icon: Icon }) => (
             <NavLink key={to} to={to} onClick={onClose} className="flex items-center gap-3 rounded-xl px-3 py-3 text-[15px] font-medium text-ink-700 hover:bg-surface-alt">
               <Icon size={19} />
-              {label}
+              {t(labelKey)}
             </NavLink>
           ))}
           <NavLink to="/profile" onClick={onClose} className="mt-2 flex items-center gap-2.5 rounded-xl px-2 py-2 hover:bg-surface-alt">
-            <Avatar name={currentUser.name} size="sm" />
+            <Avatar name={displayName} size="sm" />
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-ink-900">{currentUser.name}</p>
-              <p className="truncate text-xs text-ink-500">{currentUser.email}</p>
+              <p className="truncate text-sm font-medium text-ink-900">{displayName}</p>
+              <p className="truncate text-xs text-ink-500">{user?.email || ''}</p>
             </div>
           </NavLink>
         </div>

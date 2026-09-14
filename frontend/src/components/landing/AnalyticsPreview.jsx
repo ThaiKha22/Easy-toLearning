@@ -1,20 +1,28 @@
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 import { MasteryRing } from '../ui/Progress';
-import { analyticsQuizPerformance } from '../../data/mockData';
+import { useTranslation } from 'react-i18next';
+
+const previewPerformance = [
+  { date: 'T1', score: 52 },
+  { date: 'T2', score: 61 },
+  { date: 'T3', score: 68 },
+  { date: 'T4', score: 78 },
+];
 
 export default function AnalyticsPreview() {
+  const { t } = useTranslation();
   return (
     <section className="bg-surface-alt/50 py-16 lg:py-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="order-2 rounded-2xl border border-line-soft bg-surface p-5 shadow-[var(--shadow-card-hover)] lg:order-1">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-ink-900">Quiz performance</p>
-              <span className="text-xs text-success">+14% this month</span>
+              <p className="text-sm font-semibold text-ink-900">{t('landing.performance')}</p>
+              <span className="text-xs text-success">{t('landing.month')}</span>
             </div>
             <div className="mt-3 h-40">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={analyticsQuizPerformance} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+                <AreaChart data={previewPerformance} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="landingArea" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="var(--color-brand-500)" stopOpacity={0.35} />
@@ -44,12 +52,12 @@ export default function AnalyticsPreview() {
           </div>
 
           <div className="order-1 lg:order-2">
-            <p className="text-sm font-semibold text-brand-600">Know exactly where you stand</p>
+            <p className="text-sm font-semibold text-brand-600">{t('landing.know')}</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
-              Analytics that turn study time into strategy.
+              {t('landing.analyticsTitle')}
             </h2>
             <p className="mt-4 max-w-md text-base leading-relaxed text-ink-500">
-              Track study time, quiz performance, and topic mastery over time — so every session targets what will actually move your grade.
+              {t('landing.analyticsDesc')}
             </p>
           </div>
         </div>

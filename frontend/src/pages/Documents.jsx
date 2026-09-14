@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft, FileText } from 'lucide-react';
 import { subjectService, documentService } from '../services/api';
@@ -11,6 +12,7 @@ import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { useToast } from '../components/ui/Toast';
 
 export default function Documents() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [subject, setSubject] = useState(null);
   const [documents, setDocuments] = useState([]);
@@ -30,10 +32,20 @@ export default function Documents() {
 
   useEffect(load, [id]);
 
-  function handleDelete() {
-    setDocuments((docs) => docs.filter((d) => d.id !== deleteId));
-    showToast('Document deleted', 'success');
-    setDeleteId(null);
+  function requestDelete(id) {
+    setDeleteId(id);
+  }
+
+  async function handleDelete(id) {
+    try {
+      await documentService.deleteDocument(id);
+      setDocuments((docs) => docs.filter((d) => d.id !== id));
+      showToast('Đã xóa tài liệu', 'success');
+      setDeleteId(null);
+    } catch (error) {
+      showToast(error.message, 'error');
+      throw error;
+    }
   }
 
   if (loading) return <Skeleton className="h-72 rounded-2xl" />;
@@ -44,23 +56,23 @@ export default function Documents() {
       <Link to={`/subjects/${id}`} className="flex items-center gap-1 text-sm font-medium text-ink-500 hover:text-ink-900">
         <ChevronLeft size={16} /> {subject?.name}
       </Link>
-      <h2 className="font-display text-xl font-bold text-ink-900">Documents</h2>
+      <h2 className="font-display text-xl font-bold text-ink-900">{t('content.documents')}</h2>
 
-      <UploadDropzone onComplete={() => showToast('Document ready', 'success')} />
+      <UploadDropzone subjectId={id} onComplete={() => { showToast('Document ready', 'success'); load(); }} />
 
       {documents.length === 0 ? (
-        <EmptyState icon={FileText} title="No documents yet" description="Upload your first document to start learning." />
+        <EmptyState icon={FileText} title={t('content.noDocuments')} description={t('content.uploadFirst')} />
       ) : (
-        <DocumentList documents={documents} onDelete={setDeleteId} />
+        <DocumentList documents={documents} onDelete={requestDelete} />
       )}
 
       <ConfirmDialog
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
-        onConfirm={handleDelete}
-        title="Delete document?"
-        description="This will permanently remove the document and any AI-generated materials created from it."
-        confirmLabel="Delete"
+        onConfirm={() => handleDelete(deleteId)}
+        title={t('content.deleteDocument')}
+        description={t('content.deleteDescription')}
+        confirmLabel={t('content.delete')}
       />
     </div>
   );

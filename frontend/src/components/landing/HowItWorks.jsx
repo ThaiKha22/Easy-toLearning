@@ -1,19 +1,17 @@
 import { UploadCloud, Wand2, TrendingUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const steps = [
-  { icon: UploadCloud, title: 'Upload your materials', desc: 'Drop in lecture slides, PDFs, or notes — AI StudyHub reads and organizes them by subject.' },
-  { icon: Wand2, title: 'Let AI transform them', desc: 'Get summaries, flashcards and quizzes generated automatically from what you uploaded.' },
-  { icon: TrendingUp, title: 'Learn and track your progress', desc: 'Study with a plan that adapts to your exam date and the topics you\u2019re weakest on.' },
-];
+const steps = [{ icon: UploadCloud, title: 'upload', desc: 'uploadDesc' }, { icon: Wand2, title: 'transform', desc: 'transformDesc' }, { icon: TrendingUp, title: 'track', desc: 'trackDesc' }];
 
 export default function HowItWorks() {
+  const { t } = useTranslation();
   return (
     <section id="how-it-works" className="bg-surface-alt/50 py-16 lg:py-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <div className="max-w-xl">
-          <p className="text-sm font-semibold text-brand-600">The process</p>
+          <p className="text-sm font-semibold text-brand-600">{t('landing.process')}</p>
           <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
-            From raw notes to a study plan in three steps.
+            {t('landing.processTitle')}
           </h2>
         </div>
 
@@ -26,9 +24,9 @@ export default function HowItWorks() {
               </div>
               <div className="mt-4 flex items-center gap-2">
                 <Icon size={18} className="text-brand-600" />
-                <h3 className="font-display text-base font-semibold text-ink-900">{title}</h3>
+                <h3 className="font-display text-base font-semibold text-ink-900">{t(`landing.${title}`)}</h3>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-ink-500">{desc}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-500">{t(`landing.${desc}`)}</p>
             </div>
           ))}
         </div>

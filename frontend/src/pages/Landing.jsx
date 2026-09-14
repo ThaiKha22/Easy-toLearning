@@ -2,7 +2,6 @@ import LandingNav from '../components/landing/LandingNav';
 import Hero from '../components/landing/Hero';
 import Features from '../components/landing/Features';
 import HowItWorks from '../components/landing/HowItWorks';
-import AITutorPreview from '../components/landing/AITutorPreview';
 import AnalyticsPreview from '../components/landing/AnalyticsPreview';
 import { CTA, Footer } from '../components/landing/CTAFooter';
 
@@ -13,7 +12,6 @@ export default function Landing() {
       <Hero />
       <Features />
       <HowItWorks />
-      <AITutorPreview />
       <AnalyticsPreview />
       <CTA />
       <Footer />

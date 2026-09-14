@@ -66,6 +66,11 @@ const documentSchema = new mongoose.Schema(
       default: "",
     },
 
+    summary: {
+      type: String,
+      default: "",
+    },
+
     processingStatus: {
       type: String,
       enum: [

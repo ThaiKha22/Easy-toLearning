@@ -1,10 +1,12 @@
 import { useCallback, useRef, useState } from 'react';
 import { UploadCloud, FileText, X, Sparkles } from 'lucide-react';
 import { ProgressBar } from '../ui/Progress';
+import { documentService } from '../../services/api';
+import { useTranslation } from 'react-i18next';
 
-const STAGES = ['Uploading...', 'Processing document...', 'AI generating study materials...'];
-
-export default function UploadDropzone({ onComplete }) {
+export default function UploadDropzone({ subjectId, onComplete }) {
+  const { t } = useTranslation();
+  const stages = [t('documents.upload'), t('documents.processing'), t('documents.generating')];
   const [dragOver, setDragOver] = useState(false);
   const [jobs, setJobs] = useState([]); // { id, name, stageIndex, progress }
   const inputRef = useRef(null);
@@ -13,31 +15,24 @@ export default function UploadDropzone({ onComplete }) {
     const newJobs = Array.from(files).map((f) => ({
       id: `${f.name}-${Date.now()}-${Math.random()}`,
       name: f.name,
+      file: f,
       stageIndex: 0,
       progress: 0,
     }));
     setJobs((j) => [...newJobs, ...j]);
 
-    newJobs.forEach((job) => runJob(job.id));
-  }, []);
+    newJobs.forEach((job) => uploadJob(job));
+  }, [subjectId]);
 
-  function runJob(id) {
-    let stageIndex = 0;
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 14;
-      if (progress >= 100) {
-        progress = 0;
-        stageIndex += 1;
-        if (stageIndex >= STAGES.length) {
-          clearInterval(interval);
-          setJobs((js) => js.filter((j) => j.id !== id));
-          onComplete?.();
-          return;
-        }
-      }
-      setJobs((js) => js.map((j) => (j.id === id ? { ...j, stageIndex, progress } : j)));
-    }, 220);
+  async function uploadJob(job) {
+    try {
+      setJobs((js) => js.map((item) => (item.id === job.id ? { ...item, progress: 35 } : item)));
+      await documentService.upload(job.file, subjectId, job.name);
+      setJobs((js) => js.map((item) => (item.id === job.id ? { ...item, stageIndex: 2, progress: 100 } : item)));
+      onComplete?.();
+    } catch {
+      setJobs((js) => js.map((item) => (item.id === job.id ? { ...item, stageIndex: 0, progress: 0, error: true } : item)));
+    }
   }
 
   function handleDrop(e) {
@@ -71,8 +66,8 @@ export default function UploadDropzone({ onComplete }) {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
           <UploadCloud size={26} />
         </div>
-        <p className="mt-4 text-sm font-medium text-ink-900">Drag & drop files here, or click to browse</p>
-        <p className="mt-1 text-xs text-ink-500">Supports PDF, DOCX and TXT</p>
+        <p className="mt-4 text-sm font-medium text-ink-900">{t('documents.drop')}</p>
+        <p className="mt-1 text-xs text-ink-500">{t('documents.supports')}</p>
       </div>
 
       {jobs.length > 0 && (
@@ -93,7 +88,7 @@ export default function UploadDropzone({ onComplete }) {
                     <X size={14} />
                   </button>
                 </div>
-                <p className="mt-0.5 text-xs text-ink-500">{STAGES[job.stageIndex]}</p>
+                <p className="mt-0.5 text-xs text-ink-500">{stages[job.stageIndex]}</p>
                 <ProgressBar value={job.progress} color={job.stageIndex === 2 ? 'violet' : 'brand'} className="mt-2" />
               </div>
             </div>

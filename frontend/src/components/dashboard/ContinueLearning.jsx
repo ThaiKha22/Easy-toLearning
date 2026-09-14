@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
@@ -6,11 +7,12 @@ import { ProgressBar } from '../ui/Progress';
 import { formatRelativeTime } from '../../utils/format';
 
 export default function ContinueLearning({ subjects }) {
+  const { t } = useTranslation();
   return (
     <Card padding="p-5">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-base font-semibold text-ink-900">Continue Learning</h2>
-        <Link to="/subjects" className="text-sm font-medium text-brand-600 hover:underline">View all</Link>
+        <h2 className="font-display text-base font-semibold text-ink-900">{t('dashboard.continueLearning')}</h2>
+        <Link to="/subjects" className="text-sm font-medium text-brand-600 hover:underline">{t('dashboard.viewAll')}</Link>
       </div>
       <div className="mt-4 space-y-3">
         {subjects.slice(0, 3).map((s) => (

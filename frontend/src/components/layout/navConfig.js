@@ -1,18 +1,17 @@
 import {
-  LayoutDashboard, BookOpen, Layers, ListChecks, Sparkles, CalendarClock, BarChart3, Settings, HelpCircle,
+  LayoutDashboard, BookOpen, Layers, ListChecks, CalendarClock, BarChart3, Settings, HelpCircle,
 } from 'lucide-react';
 
 export const primaryNav = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/subjects', label: 'My Subjects', icon: BookOpen },
-  { to: '/flashcards', label: 'Flashcards', icon: Layers },
-  { to: '/quizzes', label: 'Quizzes', icon: ListChecks },
-  { to: '/ai-tutor', label: 'AI Tutor', icon: Sparkles },
-  { to: '/study-plan', label: 'Study Plan', icon: CalendarClock },
-  { to: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard },
+  { to: '/subjects', labelKey: 'nav.subjects', icon: BookOpen },
+  { to: '/flashcards', labelKey: 'nav.flashcards', icon: Layers },
+  { to: '/quizzes', labelKey: 'nav.quizzes', icon: ListChecks },
+  { to: '/study-plan', labelKey: 'nav.studyPlan', icon: CalendarClock },
+  { to: '/analytics', labelKey: 'nav.analytics', icon: BarChart3 },
 ];
 
 export const secondaryNav = [
-  { to: '/profile', label: 'Settings', icon: Settings },
-  { to: '/help', label: 'Help', icon: HelpCircle },
+  { to: '/profile', labelKey: 'nav.settings', icon: Settings },
+  { to: '/help', labelKey: 'nav.help', icon: HelpCircle },
 ];

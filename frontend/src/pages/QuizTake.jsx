@@ -16,7 +16,8 @@ export default function QuizTake() {
   const [error, setError] = useState(false);
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [seconds, setSeconds] = useState(0);
   const timerRef = useRef(null);
 
@@ -44,9 +45,27 @@ export default function QuizTake() {
     setAnswers((a) => ({ ...a, [question.id]: optId }));
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    const unanswered = quiz.questions.some((question) => answers[question.id] === undefined);
+    if (unanswered) {
+      setSubmitError('Please answer every question before submitting.');
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitError('');
     clearInterval(timerRef.current);
-    navigate('/quiz-results/quiz-attempt-1');
+    try {
+      const submittedAnswers = quiz.questions.map((question) => ({
+        questionId: question.id,
+        answer: answers[question.id],
+      }));
+      const attempt = await quizService.submitAttempt(id, submittedAnswers);
+      navigate(`/quiz-results/${attempt._id}`);
+    } catch (err) {
+      setSubmitError(err.message);
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -64,6 +83,11 @@ export default function QuizTake() {
       <ProgressBar value={current + 1} max={quiz.questions.length} className="mt-4" />
 
       <div className="mt-6">
+        {submitError && (
+          <div className="mb-4 rounded-xl border border-danger-50 bg-danger-50 px-3.5 py-2.5 text-sm text-danger">
+            {submitError}
+          </div>
+        )}
         <p className="font-display text-lg font-semibold leading-snug text-ink-900 sm:text-xl">{question.prompt}</p>
         <div className="mt-5 space-y-2.5">
           {question.options.map((opt) => (
@@ -87,7 +111,7 @@ export default function QuizTake() {
         {current < quiz.questions.length - 1 ? (
           <Button icon={ChevronRight} iconPosition="right" onClick={() => setCurrent((c) => c + 1)}>Next</Button>
         ) : (
-          <Button onClick={handleSubmit}>Submit Quiz</Button>
+          <Button onClick={handleSubmit} loading={submitting} disabled={submitting}>Submit Quiz</Button>
         )}
       </div>
 
@@ -99,7 +123,7 @@ export default function QuizTake() {
         {current < quiz.questions.length - 1 ? (
           <Button icon={ChevronRight} iconPosition="right" onClick={() => setCurrent((c) => c + 1)} className="flex-1">Next</Button>
         ) : (
-          <Button onClick={handleSubmit} className="flex-1">Submit</Button>
+          <Button onClick={handleSubmit} loading={submitting} disabled={submitting} className="flex-1">Submit</Button>
         )}
       </div>
     </div>

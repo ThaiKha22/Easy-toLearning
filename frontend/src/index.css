@@ -72,6 +72,22 @@ body {
   color: #EAF0F3;
 }
 
+.dark {
+  --color-paper: #0B0F13;
+  --color-surface: #10151B;
+  --color-surface-alt: #171E26;
+  --color-ink-900: #EAF0F3;
+  --color-ink-700: #C5D0D8;
+  --color-ink-500: #91A0AB;
+  --color-ink-300: #6F7D87;
+  --color-line: #2B3741;
+  --color-line-soft: #202A33;
+  --color-brand-50: #123A35;
+  --color-spark-50: #3B2D16;
+  --color-success-50: #12392A;
+  --color-danger-50: #3D201F;
+}
+
 h1, h2, h3, h4, .font-display {
   font-family: var(--font-display);
 }

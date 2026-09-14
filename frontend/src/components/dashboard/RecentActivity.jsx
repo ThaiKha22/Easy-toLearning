@@ -1,4 +1,5 @@
 import { ListChecks, UploadCloud, Layers, Clock3 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Card from '../ui/Card';
 import { formatRelativeTime } from '../../utils/format';
 
@@ -11,9 +12,10 @@ const colorMap = {
 };
 
 export default function RecentActivity({ activity }) {
+  const { t } = useTranslation();
   return (
     <Card padding="p-5">
-      <h2 className="font-display text-base font-semibold text-ink-900">Recent Activity</h2>
+      <h2 className="font-display text-base font-semibold text-ink-900">{t('dashboard.recentActivity')}</h2>
       <ul className="mt-4 space-y-4">
         {activity.map((a) => {
           const Icon = iconMap[a.type];

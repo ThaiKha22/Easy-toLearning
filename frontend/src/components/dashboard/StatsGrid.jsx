@@ -1,13 +1,15 @@
 import { TrendingUp, Flame, Clock, Target } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Card from '../ui/Card';
 import { formatMinutes } from '../../utils/format';
 
 export default function StatsGrid({ stats }) {
+  const { t } = useTranslation();
   const items = [
-    { label: 'Overall Progress', value: `${stats.overallProgress}%`, icon: TrendingUp, color: 'text-brand-600 bg-brand-50' },
-    { label: 'Study Streak', value: `${stats.studyStreak} days`, icon: Flame, color: 'text-spark-600 bg-spark-50' },
-    { label: 'Study Time', value: formatMinutes(stats.studyTimeMinutes), icon: Clock, color: 'text-violet-600 bg-[#EFEDFC]' },
-    { label: 'Quiz Average', value: `${stats.quizAverage}%`, icon: Target, color: 'text-success bg-success-50' },
+    { label: t('dashboard.overallProgress'), value: `${stats.overallProgress}%`, icon: TrendingUp, color: 'text-brand-600 bg-brand-50' },
+    { label: t('dashboard.studyStreak'), value: `${stats.studyStreak} ${t('dashboard.days')}`, icon: Flame, color: 'text-spark-600 bg-spark-50' },
+    { label: t('dashboard.studyTime'), value: formatMinutes(stats.studyTimeMinutes), icon: Clock, color: 'text-violet-600 bg-[#EFEDFC]' },
+    { label: t('dashboard.quizAverage'), value: `${stats.quizAverage}%`, icon: Target, color: 'text-success bg-success-50' },
   ];
   return (
     <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ListChecks } from 'lucide-react';
 import { quizService } from '../services/api';
 import QuizCard from '../components/quizzes/QuizCard';
@@ -7,6 +8,7 @@ import EmptyState from '../components/ui/EmptyState';
 import ErrorState from '../components/ui/ErrorState';
 
 export default function Quizzes() {
+  const { t } = useTranslation();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -21,7 +23,7 @@ export default function Quizzes() {
   if (loading) return <SkeletonGrid />;
   if (error) return <ErrorState onRetry={load} />;
   if (quizzes.length === 0) {
-    return <EmptyState icon={ListChecks} title="No quizzes yet" description="Generate a quiz from your study materials to test yourself." />;
+    return <EmptyState icon={ListChecks} title={t('content.noQuizzes')} description={t('content.noQuizzesDescription')} />;
   }
 
   return (

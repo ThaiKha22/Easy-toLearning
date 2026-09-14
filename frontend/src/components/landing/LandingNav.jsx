@@ -2,14 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Menu, X } from 'lucide-react';
 import Button from '../ui/Button';
-
-const links = [
-  { href: '#features', label: 'Features' },
-  { href: '#how-it-works', label: 'How it works' },
-  { href: '#ai-tutor', label: 'AI Tutor' },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function LandingNav() {
+  const { t } = useTranslation();
+  const links = [{ href: '#features', label: t('landing.features') }, { href: '#how-it-works', label: t('landing.howItWorks') }];
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-line-soft/80 bg-paper/85 backdrop-blur">
@@ -30,8 +27,8 @@ export default function LandingNav() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link to="/login" className="text-sm font-medium text-ink-700 hover:text-ink-900">Log in</Link>
-          <Link to="/register"><Button size="sm">Get Started</Button></Link>
+          <Link to="/login" className="text-sm font-medium text-ink-700 hover:text-ink-900">{t('landing.login')}</Link>
+          <Link to="/register"><Button size="sm">{t('landing.getStarted')}</Button></Link>
         </div>
 
         <button className="p-2 text-ink-700 md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Toggle menu">
@@ -48,8 +45,8 @@ export default function LandingNav() {
               </a>
             ))}
             <div className="mt-2 flex flex-col gap-2">
-              <Link to="/login" onClick={() => setOpen(false)}><Button variant="secondary" fullWidth>Log in</Button></Link>
-              <Link to="/register" onClick={() => setOpen(false)}><Button fullWidth>Get Started</Button></Link>
+              <Link to="/login" onClick={() => setOpen(false)}><Button variant="secondary" fullWidth>{t('landing.login')}</Button></Link>
+              <Link to="/register" onClick={() => setOpen(false)}><Button fullWidth>{t('landing.getStarted')}</Button></Link>
             </div>
           </div>
         </div>

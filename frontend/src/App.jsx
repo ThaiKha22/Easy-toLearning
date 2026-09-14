@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastProvider } from './components/ui/Toast';
 import DashboardLayout from './components/layout/DashboardLayout';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 import Landing from './pages/Landing';
 import Login from './pages/Login';
@@ -16,7 +17,6 @@ import Flashcards from './pages/Flashcards';
 import Quizzes from './pages/Quizzes';
 import QuizTake from './pages/QuizTake';
 import QuizResult from './pages/QuizResult';
-import AITutor from './pages/AITutor';
 import StudyPlan from './pages/StudyPlan';
 import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
@@ -34,7 +34,8 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Authenticated routes */}
-          <Route element={<DashboardLayout />}>
+          <Route element={<ProtectedRoute />}>
+            <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/subjects" element={<Subjects />} />
             <Route path="/subjects/:id" element={<SubjectDetail />} />
@@ -44,10 +45,10 @@ export default function App() {
             <Route path="/quizzes" element={<Quizzes />} />
             <Route path="/quizzes/:id" element={<QuizTake />} />
             <Route path="/quiz-results/:id" element={<QuizResult />} />
-            <Route path="/ai-tutor" element={<AITutor />} />
             <Route path="/study-plan" element={<StudyPlan />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/profile" element={<Profile />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<NotFound />} />
